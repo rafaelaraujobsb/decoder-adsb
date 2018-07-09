@@ -4,7 +4,7 @@ Script criado para a decodificação de mensagens ADS-B.
 
 __Requisitos:__
 
-* pyModeS
+* [pyModeS](https://github.com/junzis/pyModeS)
 * pprint
 * time
 
