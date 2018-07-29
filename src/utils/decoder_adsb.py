@@ -1,7 +1,6 @@
 import  pyModeS as pms
 import pprint
 import time as t
-import sys
 
 #
 # Downlink Format válido: 17 ou 18
@@ -15,14 +14,16 @@ incorrectDF = []
 # 'contPosBARO': 0, 
 # 'contPosGNSS': 0
 
+
 def posicao(msg, icao, key):
-    '''
+    """
         Função para determinar o que fazer quando receber uma posição
         key: chave do dicionario que se deseja alterar
 
         0 para even
         1 para odd
-    '''
+    """
+
     timestamp = int(t.time())
 
     typeMsg = pms.adsb.oe_flag(msg)
