@@ -1,7 +1,7 @@
 import time
 from threading import Thread, Event
 from queue import Queue 
-from utils.adsb import start as st_adsb
+from util.adsb import start as st_adsb
 
 messages = Queue()
 event = Event()

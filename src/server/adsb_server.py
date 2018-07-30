@@ -49,9 +49,6 @@ class Server:
 
                 messages.put((data, timestamp))
 
-                # threading.Thread(target = decoder_adsb, args = (data, cont)).start()
-                # print(data)
-
             print('Cliente desconectado ', address)
             client.close()
 

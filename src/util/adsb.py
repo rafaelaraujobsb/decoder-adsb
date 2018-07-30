@@ -7,8 +7,8 @@ import time as t
 #  
 
 # Localização da antena
-lat_antenna = 
-lon_antenna = 
+lat_antenna = -15.8037544
+lon_antenna = -48.0866267
 
 aircrafts = {} # armazena as instâncias das classes
 
@@ -35,6 +35,8 @@ class Aircraft():
         self.version = None # versão do adsb
         self.reserved = []
 
+        self.last_msg = None
+
     # substitui o hash
     def __repr__(self):
         return self.icao
@@ -45,12 +47,14 @@ class Aircraft():
         info += 'Posição(c/ Gnss Height): {}\nPosição(surface): {}\n'.format(self.position['gnss'], self.position['surface'])
         info += 'Altitude: {}\nVelocidades: {}\n'.format(self.altitude, self.velocities)
         info += 'Versão ADSB: {}\n'.format(self.version)
+        info += 'Última mensagem: {}\n'.format(self.last_msg)
         
         return info
 
     # verifica code
     def code(self, msg):
         self.count_msgs += 1
+        self.last_msg = t.strftime("%D %H:%M", t.localtime(msg[1]))
 
         typecode = pms.adsb.typecode(msg[0])
 
@@ -80,10 +84,10 @@ class Aircraft():
                 self.altitude.append(pms.adsb.altitude(msg[0]))
                 
         elif 23 <= typecode <=27:
-            self.reserved.append(msg[0])
+            self.reserved.append(msg)
         
         elif typecode == 28:
-            self.status.append(msg[0])
+            self.status.append(msg)
         
         # Target state and status information
         elif typecode == 29:
@@ -91,7 +95,7 @@ class Aircraft():
         
         # Aircraft operation status
         elif typecode == 31:
-            self.version = pms.adsb.version(msg)
+            self.version = pms.adsb.version(msg[0])
         
         else:
             print('Não foi encontrado uma referência')
@@ -132,7 +136,7 @@ class Aircraft():
 def save():
     global aircrafts
 
-    with open('../output/info2_0.txt','w') as f:
+    with open('../info2_0.txt','w') as f:
         for aircraft in aircrafts.values():
             f.write('=====================\n')
             f.write(aircraft.print_info())
@@ -144,19 +148,23 @@ def start(msg):
     global aircrafts
 
     # verificação da mensagem
-    if int(pms.crc(msg[0], encode=False)) != 0:
-        with open('../mensagens/corrupted.txt', 'a') as f:
-            f.write('{} {}\n'.format(msg[0], msg[1]))
-    elif 17 != pms.df(msg[0]) != 18:
-        with open('../mensagens/incorrectDF.txt', 'a') as f:
-            f.write('{} {}\n'.format(msg[0], msg[1]))
-    else:
-        icao = pms.adsb.icao(msg[0]) # ICAO aeronave
+    try:
+        if int(pms.crc(msg[0], encode=False)) != 0:
+            with open('../mensagens/output/corrupted.txt', 'a') as f:
+                f.write('{} {}\n'.format(msg[0], msg[1]))
+        elif 17 != pms.df(msg[0]) != 18:
+            with open('../mensagens/output/incorrectDF.txt', 'a') as f:
+                f.write('{} {}\n'.format(msg[0], msg[1]))
+        else:
+            icao = pms.adsb.icao(msg[0]) # ICAO aeronave
 
         if icao not in aircrafts:
             aircrafts[icao] = Aircraft(icao)
 
         aircrafts[icao].code(msg)
+    except:
+        print("Erro com a mensage: ", msg)
+    
 
 def main():
     """
