@@ -10,8 +10,8 @@ if __name__ == "__main__":
     threading.Thread(target=start_server).start()
     threading.Thread(target=controll).start()
 
-    schedule.every(30).seconds.do(save)
+    schedule.every(180).seconds.do(save)
 
     while True:
         schedule.run_pending()
-        t.sleep(3)
+        t.sleep(50)

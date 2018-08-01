@@ -158,10 +158,10 @@ def start(msg):
         else:
             icao = pms.adsb.icao(msg[0]) # ICAO aeronave
 
-        if icao not in aircrafts:
-            aircrafts[icao] = Aircraft(icao)
+            if icao not in aircrafts:
+                aircrafts[icao] = Aircraft(icao)
 
-        aircrafts[icao].code(msg)
+            aircrafts[icao].code(msg)
     except:
         print("Erro com a mensage: ", msg)
     
