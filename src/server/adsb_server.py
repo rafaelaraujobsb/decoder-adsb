@@ -9,7 +9,7 @@ class Server:
         self.port = port  # porta que será executado o socket
 
         # AF_INET: indica o uso de IPv4
-        # SOCK_DGRAM: indica que o socket será usado com UDP
+        # SOCK_STREAM: indica que o socket será usado com TCP
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.bind((self.host, self.port))  # seta as configurações de porta e host
 

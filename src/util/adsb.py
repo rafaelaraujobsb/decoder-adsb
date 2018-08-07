@@ -136,7 +136,7 @@ class Aircraft():
 def save():
     global aircrafts
 
-    with open('../info2_0.txt','w') as f:
+    with open('../info2_0'+ t.strftime("%D", t.localtime(int(t.time()))).replace("/","_") +'.txt','w') as f:
         for aircraft in aircrafts.values():
             f.write('=====================\n')
             f.write(aircraft.print_info())

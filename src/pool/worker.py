@@ -36,7 +36,7 @@ def get_pool(n_th: int):
     return [Worker(target=filter_msg, queue=messages, name=f'Worker {n}') for n in range(n_th)]
 
 def controll():
-    thrs = get_pool(4)
+    thrs = get_pool(6)
 
     for th in thrs:
         time.sleep(1)
