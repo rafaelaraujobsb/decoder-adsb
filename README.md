@@ -7,5 +7,3 @@ __Requisitos:__
 * [pyModeS](https://github.com/junzis/pyModeS)
 * pprint
 * time
-
-_Obs: o projeto está em desenvolvimento._
